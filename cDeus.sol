@@ -1885,7 +1885,7 @@ swap iSwap = swap(swapper);
        IERC20 public _shares = IERC20(address(this));
        uint256 public _tax;
        address public _treasury;
-       uint256 _rewardsPerToken = _rewards / _totalAssets;
+       uint256 _rewardsPerToken;
       
 
     constructor(
@@ -1953,11 +1953,13 @@ swap iSwap = swap(swapper);
     }
     
     function harvest() external {
+      _rewardsPerToken = _rewards / _totalAssets;
     uint256 _balanceOwed = _rewardsPerToken * IERC20(address(this)).balanceOf(msg.sender);
         _asset.safeTransfer(msg.sender, _balanceOwed);
     }
     
-    function pendingRewards(address user) external view returns(uint256 pendingShares) {
+    function pendingRewards(address user) external returns(uint256 pendingShares) {
+      _rewardsPerToken = _rewards / _totalAssets;
        uint256 _balanceOwed = _rewardsPerToken * IERC20(address(this)).balanceOf(user);
         return _balanceOwed;
     }
